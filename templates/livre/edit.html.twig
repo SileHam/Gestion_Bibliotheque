@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier {{ livre.titre }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>✏️ Modifier : {{ livre.titre }}</h1>
+
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ type }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="form-container">
+            {{ form_start(form) }}
+                {{ form_row(form.titre) }}
+                {{ form_row(form.auteur) }}
+                {{ form_row(form.annePublication) }}
+                {{ form_row(form.resume) }}
+                {{ form_row(form.disponible) }}
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success">💾 Enregistrer</button>
+                    <a href="{{ path('livre_show', {id: livre.id}) }}" class="btn btn-secondary">🔙 Annuler</a>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

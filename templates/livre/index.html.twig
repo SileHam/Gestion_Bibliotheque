@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des livres{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>📚 Liste des livres</h1>
+        
+        {# Messages Flash #}
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ type }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="actions">
+            <a href="{{ path('livre_new') }}" class="btn btn-primary">➕ Ajouter un livre</a>
+            <span class="badge">Total : {{ total ?? 0 }}</span>
+        </div>
+
+        {% if livres is empty %}
+            <p class="alert alert-info">Aucun livre dans la bibliothèque.</p>
+        {% else %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Auteur</th>
+                        <th>Année</th>
+                        <th>Disponibilité</th>
+                        <th>Date d'ajout</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for livre in livres %}
+                        <tr>
+                            <td>
+                                <strong>{{ livre.titre }}</strong>
+                                {% if livre.isRecent() %}
+                                    <span class="badge badge-new">Nouveau</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ livre.auteur.nom ?? 'Non défini' }}</td>
+                            <td>{{ livre.annePublication }}</td>
+                            <td>
+                                {% if livre.disponible %}
+                                    <span class="badge badge-success">✅ Disponible</span>
+                                {% else %}
+                                    <span class="badge badge-danger">❌ Emprunté</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ livre.dateAjoutFormatted }}</td>
+                            <td>
+                                <a href="{{ path('livre_show', {id: livre.id}) }}" class="btn btn-sm btn-info">👁️ Voir</a>
+                                <a href="{{ path('livre_edit', {id: livre.id}) }}" class="btn btn-sm btn-warning">✏️ Modifier</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}
